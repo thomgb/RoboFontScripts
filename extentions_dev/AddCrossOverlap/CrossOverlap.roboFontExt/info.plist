@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>addToMenu</key>
+	<array/>
+	<key>developer</key>
+	<string>Thom Janssen</string>
+	<key>developerURL</key>
+	<string>http://www.hallotype.nl</string>
+	<key>html</key>
+	<false/>
+	<key>launchAtStartUp</key>
+	<integer>1</integer>
+	<key>mainScript</key>
+	<string>crossOverlap.py</string>
+	<key>name</key>
+	<string>CrossOverlap</string>
+	<key>requiresVersionMajor</key>
+	<string>1</string>
+	<key>requiresVersionMinor</key>
+	<string>6</string>
+	<key>timeStamp</key>
+	<real>1430851989.4236901</real>
+	<key>version</key>
+	<string>0.1</string>
+</dict>
+</plist>
