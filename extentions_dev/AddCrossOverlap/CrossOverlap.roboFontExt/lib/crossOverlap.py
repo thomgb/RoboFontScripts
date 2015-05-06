@@ -4,19 +4,22 @@ Select two points -in the same contour- where the overlap is required. And run.
 
 TODO:
 	-Support addOverlap with multiple contours (ABPR etc.)
-	-Make a staightLineCheck. When a glyph is skewed, the original points in 
+DONE-Make a staightLineCheck. When a glyph is skewed, the original points in 
 	 the stem do not get removed by removeOverlap.
 
 
 Thom Janssen 2015
+v0.2
 """
 
 from AppKit import NSImage
 from lib.UI.toolbarGlyphTools import ToolbarGlyphTools
 from mojo.events import addObserver
 import os
-from math import atan2, sin, cos
+from math import *
 
+#from eventTools.eventManager import getEventsToolbarItem, publishEvent
+#:)
 
 class CrossOverlapTool(object):
 		
@@ -83,6 +86,40 @@ class CrossOverlapTool(object):
 		else:
 			return False
 
+	def calculateAngle(self, start, end):
+		b = end[0] - start[0]
+		a = end[1] - start[1]
+		c = sqrt(a ** 2 + b ** 2)
+		if c == 0:
+			return None
+		cosAngle = b / c
+		sinAngle = a / c
+		cosAngle = degrees(acos(cosAngle))
+		sinAgnle = degrees(asin(sinAngle))
+		if sinAngle < 0:
+			#cosAngle = 360 - cosAngle
+			pass
+		return cosAngle
+
+	
+	def checkStraightLines(self, g, tolerance=2):
+		for contour in g.contours:
+			l = len(contour.points)
+			for i in range(0, len(contour.points), 1):
+				prev = contour.points[i-1]
+				cur = contour.points[i]
+				next = contour.points[(i+1)%l]
+				angle1 = self.calculateAngle((prev.x,prev.y),(cur.x,cur.y))
+				angle2 = self.calculateAngle((cur.x,cur.y),(next.x,next.y))
+				if abs(angle1 - angle2) < tolerance:
+					cur.name = "unnecessaryPoint"
+		for contour in g.contours:
+			for point in contour.points:
+				if point.name ==  "unnecessaryPoint":
+					point.getParent().removePoint(point)
+		g.update()
+
+
 	def crossOverlap(self, sender):
 	
 		overlap = 20
@@ -111,6 +148,9 @@ class CrossOverlapTool(object):
 			g[0].selected = True
 			g.naked().selection.removeOverlap()
 			g[0].clockwise = clockwise
+
+			self.checkStraightLines(g)
+
 
 		## aftermath
 		g.autoContourOrder()
