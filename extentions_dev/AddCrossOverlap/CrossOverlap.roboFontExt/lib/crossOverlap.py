@@ -2,12 +2,6 @@
 Add overlap to crossbars (EFHKT etc.)
 Select two points -in the same contour- where the overlap is required. And run.
 
-TODO:
-	-Support addOverlap with multiple contours (ABPR etc.)
-DONE-Make a staightLineCheck. When a glyph is skewed, the original points in 
-	 the stem do not get removed by removeOverlap.
-
-
 Thom Janssen 2015
 v0.2
 """
@@ -86,6 +80,23 @@ class CrossOverlapTool(object):
 		else:
 			return False
 
+	def getStartPoint(self, g):
+		for c in g.contours:
+			for p in c.points:
+				if p.selected:
+					return(c[-1][-1])
+
+	def setStartPoint(self, g, startPoint):
+		startx, starty = (startPoint.x,startPoint.y)
+		for c in g.contours:
+			n=-1
+			for p in c.points:
+				n+=1
+				if (p.x, p.y) == (startx, starty):
+					c.naked().setStartPoint(n)
+
+
+
 	def calculateAngle(self, start, end):
 		b = end[0] - start[0]
 		a = end[1] - start[1]
@@ -132,7 +143,10 @@ class CrossOverlapTool(object):
 		g.prepareUndo()
 
 		## select 2 points
+		startPoint = getStartPoint(g)
+		
 		selection = []
+		
 		for p in g.naked().selection.getSelectionObjects():
 			selection.append( (p.x, p.y) )
 
@@ -173,6 +187,8 @@ class CrossOverlapTool(object):
 				angle = atan2(c[last][0].x - c[last-1][0].x, c[last-1][0].y - c[last-0][0].y)
 				c[last][0].x -= sin(-angle)*overlap
 				c[last][0].y -= cos(-angle)*overlap
+		
+		setStartPoint(g, startPoint)
 
 		g.performUndo()
 
