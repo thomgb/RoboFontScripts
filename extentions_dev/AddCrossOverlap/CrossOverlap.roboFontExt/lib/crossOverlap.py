@@ -3,7 +3,7 @@ Add overlap to crossbars (EFHKT etc.)
 Select two points -in the same contour- where the overlap is required. And run.
 
 Thom Janssen 2015
-v0.2
+v0.3
 """
 
 from AppKit import NSImage
