@@ -7,8 +7,8 @@ A RoboFont extension for easily adding an overlap.
 - Click the CrossOverlap-button
 
 note: 
-Currently it only works well with straight lines.
-Currently it only works if the two selected points are in the same contour.
+- Currently it only works well with straight lines.
+- Currently it only works if the two selected points are in the same contour.
 
 TODO:
 - Multiple contours.
