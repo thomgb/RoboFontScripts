@@ -113,17 +113,18 @@ class CrossOverlapTool(object):
 		return cosAngle
 
 	
-	def checkStraightLines(self, g, tolerance=2):
+	def checkStraightLines(self, g, selection, tolerance=2,):
 		for contour in g.contours:
 			l = len(contour.points)
-			for i in range(0, len(contour.points), 1):
+			for i in range(0, l, 1):
 				prev = contour.points[i-1]
 				cur = contour.points[i]
 				next = contour.points[(i+1)%l]
-				angle1 = self.calculateAngle((prev.x,prev.y),(cur.x,cur.y))
-				angle2 = self.calculateAngle((cur.x,cur.y),(next.x,next.y))
-				if abs(angle1 - angle2) < tolerance:
-					cur.name = "unnecessaryPoint"
+				if (cur.x, cur.y) in selection:
+					angle1 = self.calculateAngle((prev.x,prev.y),(cur.x,cur.y))
+					angle2 = self.calculateAngle((cur.x,cur.y),(next.x,next.y))
+					if abs(angle1 - angle2) < tolerance:
+						cur.name = "unnecessaryPoint"
 		for contour in g.contours:
 			for point in contour.points:
 				if point.name ==  "unnecessaryPoint":
@@ -163,7 +164,7 @@ class CrossOverlapTool(object):
 			g.naked().selection.removeOverlap()
 			g[0].clockwise = clockwise
 
-			self.checkStraightLines(g)
+			self.checkStraightLines(g, selection)
 
 
 		## aftermath
