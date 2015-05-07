@@ -1,10 +1,11 @@
 # Cross Overlap
 A RoboFont extension for easily adding an overlap.
-#### Currently it only works with straight lines.
 
 ### Working
 - Select two points where the overlap is required
 - Click the CrossOverlap-button
+
+![Preview](https://github.com/thomgb/RoboFontScripts/blob/master/extentions_dev/AddCrossOverlap/addCrossOverlap.gif)
 
 note: 
 - Currently it only works well with straight lines.
