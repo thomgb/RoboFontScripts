@@ -12,6 +12,6 @@ note:
 - Currently it only works if the two selected points are in the same contour.
 
 TODO:
-- Multiple contours.
-- Better dealing with curves.
-- Check straight lines only in the overlap part of the glyph.
+- [ ] Multiple contours.
+- [ ] Better dealing with curves.
+- [x] Check straight lines only in the overlap part of the glyph. [v0.3]
