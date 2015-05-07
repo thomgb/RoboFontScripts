@@ -143,7 +143,7 @@ class CrossOverlapTool(object):
 		g.prepareUndo()
 
 		## select 2 points
-		startPoint = getStartPoint(g)
+		startPoint = self.getStartPoint(g)
 		
 		selection = []
 		
@@ -188,7 +188,7 @@ class CrossOverlapTool(object):
 				c[last][0].x -= sin(-angle)*overlap
 				c[last][0].y -= cos(-angle)*overlap
 		
-		setStartPoint(g, startPoint)
+		self.setStartPoint(g, startPoint)
 
 		g.performUndo()
 
