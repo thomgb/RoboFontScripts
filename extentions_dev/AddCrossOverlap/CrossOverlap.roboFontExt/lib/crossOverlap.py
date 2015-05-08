@@ -3,7 +3,7 @@ Add overlap to crossbars (EFHKT etc.)
 Select two points -in the same contour- where the overlap is required. And run.
 
 Thom Janssen 2015
-v0.3
+v0.4
 """
 
 from AppKit import NSImage
@@ -21,31 +21,23 @@ class CrossOverlapTool(object):
 	
 	def __init__(self):
 		
-		addObserver(self, "crossOverlapToolbar", "glyphWindowDidOpen")
+		addObserver(self, "crossOverlapToolbarItem", "glyphWindowWillShowToolbarItems")
 
-	def crossOverlapToolbar(self, info):
-		window = info['window']
-		if window is None:
-			return
+	def crossOverlapToolbarItem(self, info):
+		
+		toolbarItems = info['toolbarItems']
 		
 		label = 'Cross Overlap'
 		identifier = 'crossOverlap'
 		filename = 'toolbarCrossOverlap.pdf'
 		callback = self.crossOverlap
-		#index = len( window.getToolbarItems() )-1
-		index = -2
-
-		toolbarItems = window.getToolbarItems()
-		vanillaWindow = window.window()
-		displayMode = vanillaWindow._window.toolbar().displayMode()
+		index=-2
+		
 		imagePath = os.path.join(self.base_path, 'resources', filename)
 		image = NSImage.alloc().initByReferencingFile_(imagePath)
 		
-		view = ToolbarGlyphTools(
-			(25, 25), 
-			[dict(image=image, toolTip=label)], 
-			trackingMode="one",
-			)
+		view = ToolbarGlyphTools((30, 25), 
+			[dict(image=image, toolTip=label)], trackingMode="one")
 		
 		newItem = dict(itemIdentifier=identifier,
 			label = label,
@@ -54,6 +46,7 @@ class CrossOverlapTool(object):
 		)
 		
 		toolbarItems.insert(index, newItem)
+		vanillaWindow = info['window'].window
 		vanillaWindow.addToolbar(
 			toolbarIdentifier="toolbar-%s" % identifier, 
 			toolbarItems=toolbarItems, 
