@@ -46,13 +46,6 @@ class CrossOverlapTool(object):
 		)
 		
 		toolbarItems.insert(index, newItem)
-		vanillaWindow = info['window'].window
-		vanillaWindow.addToolbar(
-			toolbarIdentifier="toolbar-%s" % identifier, 
-			toolbarItems=toolbarItems, 
-			addStandardItems=False,
-			)
-		vanillaWindow._window.toolbar().setDisplayMode_(displayMode)
 	
 	def selectionInOneContour(self, g):
 		# please tell me this can be easier...
@@ -68,10 +61,9 @@ class CrossOverlapTool(object):
 			for s in c.segments:
 				if sel[1] in s:
 					two = True
-		if one and two:
-			return True
-		else:
-			return False
+			if one and two:
+				return True
+		
 
 	def getStartPoint(self, g):
 		for c in g.contours:
@@ -132,6 +124,7 @@ class CrossOverlapTool(object):
 		g = CurrentGlyph()
 		
 		if not self.selectionInOneContour(g):
+			# multiple contours not yet supported
 			return
 
 		g.prepareUndo()
@@ -150,12 +143,10 @@ class CrossOverlapTool(object):
 		for i in range(len(g)):
 			#print i
 			# every new contour become the first contour...
-			clockwise = g[0].clockwise
 			g[0].selected = True
 			g.naked().selection.joinContours()
 			g[0].selected = True
 			g.naked().selection.removeOverlap()
-			g[0].clockwise = clockwise
 
 			self.checkStraightLines(g, selection)
 
