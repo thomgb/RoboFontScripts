@@ -161,7 +161,6 @@ class CrossOverlapTool(object):
 				else: hit = False
 			if hit == True:
 				## perform overlap
-				## first point always good?
 				first = len(c)-1	
 				angle = atan2(c[first][0].x - c[0][0].x, c[0][0].y - c[first][0].y)
 				c[first][0].x -= sin(-angle)*overlap
@@ -169,9 +168,15 @@ class CrossOverlapTool(object):
 				
 				##
 				last = len(c)-2
-				angle = atan2(c[last][0].x - c[last-1][0].x, c[last-1][0].y - c[last-0][0].y)
-				c[last][0].x -= sin(-angle)*overlap
-				c[last][0].y -= cos(-angle)*overlap
+				if c[last].type == 'curve':
+					i = 2
+					angle = atan2(c[last][2].x - c[last][1].x, c[last][1].y - c[last-0][2].y)
+					c[last][2].x -= sin(-angle)*overlap
+					c[last][2].y -= cos(-angle)*overlap
+				else:
+					angle = atan2(c[last][0].x - c[last-1][0].x, c[last-1][0].y - c[last-0][0].y)
+					c[last][0].x -= sin(-angle)*overlap
+					c[last][0].y -= cos(-angle)*overlap
 		
 		self.setStartPoint(g, startPoint)
 
