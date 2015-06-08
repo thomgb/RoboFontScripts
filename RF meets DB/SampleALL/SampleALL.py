@@ -6,7 +6,7 @@ A seperate file (statsfile) keeps track of the modification dates of the UFOs.
 
 Thom Janssen 2015
 TODO:
-    - mark png files with no ufo any more
+    - mark png files with no ufo any more, now only prints out the rough ones
 """
 
 import os
@@ -26,19 +26,22 @@ regel2 = sample.upper()
 
 
 def drawGlyph(glyph):
-	from fontTools.pens.cocoaPen import CocoaPen
-	pen = CocoaPen(glyph.getParent())
-	glyph.draw(pen)
-	drawPath(pen.path)
+    from fontTools.pens.cocoaPen import CocoaPen
+    pen = CocoaPen(glyph.getParent())
+    glyph.draw(pen)
+    drawPath(pen.path)
 
 ## Stats file
 statfile = "/Users/%s/path/to/sample.stats.txt" % user
 stats = open(statfile,'r').read().split("\n")
 # print stats
 newStats = """"""
+knownUfos = []
 
 for ufo, dirs, files in os.walk(rootdir):
     if ufo.endswith('.ufo'):
+            knownUfos.append(ufo.split("/")[-1][:-4])
+
             #print ufo
             ## get modified date
             ufoModDate = os.stat(ufo).st_mtime
@@ -96,6 +99,12 @@ for ufo, dirs, files in os.walk(rootdir):
                 restore()
                 saveImage(rootdir+'/Specimens/'+fam+" "+style+"__"+ufo.split("/")[-1][:-4]+'.png')
 
+# Print Rough PNGS
+for root, dirs, files in os.walk(rootdir+"/Specimens/"):
+    for png in files:
+        if png.endswith('.png'):
+            if png.split("__")[1][:-4] not in knownUfos:
+                print png, "NO UFO"
 # update to stats
 sf = open(statfile,'w')
 sf.write(newStats)
